@@ -63,9 +63,10 @@ if (!response.ok) {
 const data = await response.json();
 const text = data.content[0].text.trim();
 
-// Parse and validate JSON
+// Strip markdown code fences if present, then parse JSON
+const cleaned = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '').trim();
 try {
-  const parsed = JSON.parse(text);
+  const parsed = JSON.parse(cleaned);
   console.log(JSON.stringify(parsed));
 } catch (e) {
   console.error('Failed to parse story JSON:', e.message);
